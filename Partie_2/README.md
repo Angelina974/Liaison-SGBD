@@ -73,10 +73,40 @@ output {
 Télécharger le fichier JDBC manuellement :
 
 - Ouvrir un navigateur web et accèder à https://jdbc.postgresql.org/download/postgresql-42.2.18.jar.
-- Télécharger le fichier sur ton ordinateur.
+- Télécharger le fichier sur son ordinateur.
 - Déplacer le fichier téléchargé au répertoire `logstash/pipeline`
 
 4. **Vérifier la configuration et les logs de Logstash :**
-- relancer Docker Compose : `docker-compose up -d`
+- relancer Docker Compose : `docker-compose restart logstash`
 - vérifier les logs avec la commande : `docker logs logstash`
-- vérifier les données dans ElasticSearch : utilisation de Postman pour faire la reqête suivante : 
+- se rendre dans le conteneur logstash : `docker exec -it logstash bash`
+- vérifier la connexion à ElasticSearch depuis le conteneur logstash : `curl -X GET "http://elasticsearch:9200"`
+Réponse du terminal : 
+```
+{
+  "name" : "45491b18b9f2",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "loAsKQrhTjWCBLHPYYnhnQ",
+  "version" : {
+    "number" : "7.17.3",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "5ad023604c8d7416c9eb6c0eadb62b14e766caff",
+    "build_date" : "2022-04-19T08:11:19.070913226Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.11.1",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
+```
+  
+5. **Vérifier les indices dans ElasticSearch :**
+- vérifier si l'index products existe dans ElasticSearch après s'être connecter au conteneur Logstash : `curl -X GET "http://localhost:9200/_cat/indices?v"`
+- Réponse du terminal :
+```
+health status index            uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   .geoip_databases FUe7jtz4T7SrgXpnNKy5JA   1   0         33           29     30.5mb         30.5mb
+yellow open   products         Ma4M1VkfQQ2kEq9Rj7o3YA   1   1          0            0       226b           226b
+```
