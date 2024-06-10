@@ -76,11 +76,13 @@ Télécharger le fichier JDBC manuellement :
 - Télécharger le fichier sur son ordinateur.
 - Déplacer le fichier téléchargé au répertoire `logstash/pipeline`
 
-4. **Vérifier la configuration et les logs de Logstash :**
+### Etape 2 : Validation de la synchronisation
+1. **Vérifier la configuration et les logs de Logstash :**
 - relancer Docker Compose : `docker-compose restart logstash`
 - vérifier les logs avec la commande : `docker logs logstash`
 - se rendre dans le conteneur logstash : `docker exec -it logstash bash`
 - vérifier la connexion à ElasticSearch depuis le conteneur logstash : `curl -X GET "http://elasticsearch:9200"`
+
 Réponse du terminal : 
 ```
 {
@@ -102,9 +104,10 @@ Réponse du terminal :
 }
 ```
   
-5. **Vérifier les indices dans ElasticSearch :**
+2. **Vérifier les indices dans ElasticSearch :**
 - vérifier si l'index products existe dans ElasticSearch après s'être connecter au conteneur Logstash : `curl -X GET "http://localhost:9200/_cat/indices?v"`
-- Réponse du terminal :
+
+Réponse du terminal :
 ```
 health status index            uuid                   pri rep docs.count docs.deleted store.size pri.store.size
 green  open   .geoip_databases FUe7jtz4T7SrgXpnNKy5JA   1   0         33           29     30.5mb         30.5mb
